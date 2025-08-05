@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title> {% block title %}{% endblock title %} Proprite Dashboard</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  /* Custom scrollbar for sidebar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #7ad6ddff;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: #0f766e;
+    border-radius: 10px;
+  }
+
+  /* Icon style fix */
+  .icon {
+    flex-shrink: 0;
+  }
+
+  .sidebar a:hover {
+    background-color: #7cccbbff !important;
+  }
+
+  .card-icon-bg {
+    background-color: rgba(255 255 255 / 0.3);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Box shadow and smooth border radius for charts */
+  .chart-card {
+    border: 1.5px solid #96c5dfff;
+    border-radius: 0.75rem;
+    box-shadow: 0 8px 20px rgb(0 0 0 / 0.1);
+  }
+
+  /* Custom button for reminder section */
+  .btn-blue {
+    @apply bg-sky-400 text-white rounded-md px-4 py-1 shadow-md shadow-sky-300 hover:bg-sky-500 transition-colors;
+  }
+
+  /* Topbar icons container */
+  .topbar-icons > svg:hover {
+    stroke: #22d3ee;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body class="bg-white min-h-screen flex flex-col font-sans text-slate-900">
+
+  <!-- Top navigation bar -->
+  <header class="flex items-center justify-between bg-slate-800 text-white px-5 md:px-8 py-3 fixed top-0 left-0 right-0 z-30 select-none shadow-lg">
+    <div class="flex items-center space-x-3 text-lg font-bold tracking-tight">
+      <span class="text-white">Proprite</span>
+      {% comment %} <span class="hidden md:inline text-slate-400 font-normal">The Builder</span> {% endcomment %}
+      <button aria-label="Toggle Menu" class="md:hidden ml-3" id="menu-toggle">
+        <svg class="h-6 w-6 stroke-white" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <path d="M3 12h18M3 6h18M3 18h18"></path>
+        </svg>
+      </button>
+    </div>
+    <div class="font-semibold text-xl md:text-2xl tracking-wide"> {% block body %}{% endblock body %} - Dashboard</div>
+    <div class="flex items-center space-x-5 text-white topbar-icons">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 stroke-current" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" role="img" aria-label="Email Icon">
+        <path d="M3 8l7.89 5.26a2 2 0 0 0 2.22 0L21 8M5 19h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2z"/>
+      </svg>
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 stroke-current" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" role="img" aria-label="User Icon">
+        <path d="M12 14c3.173 0 5.75-2.577 5.75-5.75S15.173 2.5 12 2.5 6.25 5.077 6.25 8.25 8.827 14 12 14zM3.5 20a5.5 5.5 0 0 1 11 0v.5H3v-.5z"/>
+      </svg>
+    </div>
+  </header>
+
+  <main class="flex flex-grow pt-14 min-h-screen bg-slate-50">
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar fixed top-14 left-0 hidden md:flex flex-col bg-slate-900 text-white w-64 h-[calc(100vh-56px)] overflow-y-auto shadow-lg z-20">
+      <div class="p-3 sticky top-0 bg-slate-900 z-10 border-b border-slate-700">
+        <input type="text" placeholder="Search..." aria-label="Search menu" class="w-full rounded-md px-3 py-2 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-400" />
+      </div>
+      <nav class="flex flex-col text-sm font-semibold" aria-label="Sidebar navigation">
+        <a href="/manage" class="px-4 py-2 flex items-center gap-2 hover:bg-slate-700 rounded transition-colors"><span class="icon"></span>Manage</a>
+        <a href="/booked_flats" class="px-4 py-2 flex items-center gap-2 hover:bg-slate-700 rounded transition-colors"><span class="icon"></span>New Booking</a>
+        <a href="/block_inventory" class="px-4 py-2 flex items-center gap-2 hover:bg-slate-700 rounded transition-colors"><span class="icon"></span>Block Inventory</a>
+        <a href="/customer" class="px-4 py-2 flex items-center gap-2 hover:bg-slate-700 rounded transition-colors"><span class="icon"></span>Customer</a>
+        <a href="/channel_partner" class="px-4 py-2 flex items-center gap-2 hover:bg-slate-700 rounded transition-colors"><span class="icon"></span>Channel Partners</a>
+        <a href="/booked_flats" class="px-4 py-2 flex items-center gap-2 hover:bg-slate-700 rounded transition-colors"><span class="icon"></span>Booked Flats</a>
+        <a href="/blocked_flats" class="px-4 py-2 flex items-center gap-2 hover:bg-slate-700 rounded transition-colors"><span class="icon"></span>Blocked Flats</a>
+        <a href="/cancelled_flats" class="px-4 py-2 flex items-center gap-2 bg-slate-700 rounded transition-colors"><span class="icon"></span>Cancelled Flats</a>
+        <a href="/payment_received" class="px-4 py-2 flex items-center gap-2 hover:bg-slate-700 rounded transition-colors"><span class="icon"></span> Payment Received</a>
+        <a href="/payment_status" class="px-4 py-2 flex items-center gap-2 hover:bg-slate-700 rounded transition-colors"><span class="icon"></span> Payment Status</a>
+        <a href="/flats_verification" class="px-4 py-2 flex items-center gap-2 hover:bg-slate-700 rounded transition-colors"><span class="icon"></span> Flats Verification</a>
+        <a href="/loan" class="px-4 py-2 flex items-center gap-2 hover:bg-slate-700 rounded transition-colors"><span class="icon"></span> Loan</a>
+        <a href="/flats_status" class="px-4 py-2 flex items-center gap-2 hover:bg-slate-700 rounded transition-colors"><span class="icon"></span> Flats Status</a>
+        <a href="/flats_summary" class="px-4 py-2 flex items-center gap-2 hover:bg-slate-700 rounded transition-colors"><span class="icon"></span> Flats Summary</a>
+        <a href="/Project_Snapshot" class="px-4 py-2 flex items-center gap-2 hover:bg-slate-700 rounded transition-colors"><span class="icon"></span> Project Snapshot</a>
+        <a href="/set_reminder" class="px-4 py-2 flex items-center gap-2 hover:bg-slate-700 rounded transition-colors"><span class="icon"></span> Set Reminder</a>
+        <a href="/construction_updates" class="px-4 py-2 flex items-center gap-2 hover:bg-slate-700 rounded transition-colors"><span class="icon"></span> Construction Updates</a>
+        <a href="/flat_customization" class="px-4 py-2 flex items-center gap-2 hover:bg-slate-700 rounded transition-colors"><span class="icon"></span> Flat Customization</a>
+        <a href="/handover_activities" class="px-4 py-2 flex items-center gap-2 hover:bg-slate-700 rounded transition-colors"><span class="icon"></span> Handover Activities</a>
+        <a href="/documents_section" class="px-4 py-2 flex items-center gap-2 hover:bg-slate-700 rounded transition-colors"><span class="icon"></span> Documents Section</a>
+        <a href="/reports" class="px-4 py-2 flex items-center gap-2 hover:bg-slate-700 rounded transition-colors"><span class="icon"></span> Reports</a>
+      </nav>
+    </aside>
+
+    <!-- Overlay when sidebar active on mobile -->
+    <div id="overlay" class="fixed inset-0 bg-black bg-opacity-30 hidden z-10"></div>
+  
+
+
+<script>
+  // Sidebar toggle for mobile
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("overlay");
+  const menuToggle = document.getElementById("menu-toggle");
+
+  menuToggle.addEventListener("click", () => {
+    const showing = sidebar.classList.contains("flex");
+    if (showing) {
+      sidebar.classList.remove("flex");
+      sidebar.classList.add("hidden");
+      overlay.classList.add("hidden");
+    } else {
+      sidebar.classList.remove("hidden");
+      sidebar.classList.add("flex");
+      overlay.classList.remove("hidden");
+    }
+  });
+
+  overlay.addEventListener("click", () => {
+    sidebar.classList.remove("flex");
+    sidebar.classList.add("hidden");
+    overlay.classList.add("hidden");
+  });
+</script>
+
+</body>
+</html>
+
